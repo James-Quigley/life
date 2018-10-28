@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import AutoTick from './AutoTick';
-import CellComponent from './Cell';
+import CellComponent from './CellComponent';
 
 interface State {
   size: number
@@ -42,7 +42,11 @@ function App() {
   const gridStr = state.grid.cells.map(arr =>
     <tr key={arr[0].x} style={{ padding: 0, margin: 0, height: '1px' }}>
       {arr.map(cell =>
-        <td key={cell.x + "" + cell.y} style={{ padding: 0, margin: 0, height: '0px' }}>
+        <td onClick={() => {
+          const newState = state;
+          newState.grid.cells[cell.x][cell.y].alive = !newState.grid.cells[cell.x][cell.y].alive;
+          setState(newState);
+        }} key={cell.x + "" + cell.y} style={{ pointerEvents: state.started ? 'none' : 'auto', padding: 0, margin: 0, height: '0px' }}>
           <CellComponent alive={cell.alive} started={state.started} />
         </td>
       )}

@@ -18,7 +18,7 @@ const deadStyle = {
     ...sharedStyle
 }
 
-class Cell extends React.PureComponent<{ alive: boolean, started: boolean }, {}> {
+class CellComponent extends React.PureComponent<{ alive: boolean, started: boolean }, {}> {
 
     constructor(props: { alive: boolean, started: boolean }) {
         super(props);
@@ -35,4 +35,4 @@ class Cell extends React.PureComponent<{ alive: boolean, started: boolean }, {}>
     }
 }
 
-export default Cell;
+export default CellComponent;
