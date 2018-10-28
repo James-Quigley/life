@@ -6,12 +6,20 @@ const aliveStyle = {
   backgroundColor: "#5be018"
 }
 
+interface State {
+  grid: Grid
+  started: boolean
+}
+
 const gridSize = 20;
 function App() {
-  const [state, setState] = useState({
+
+  const defaultState: State = {
     grid: new Grid(gridSize),
     started: false
-  });
+  };
+
+  const [state, setState] = useState(defaultState);
 
   const gridStr = state.grid.cells.map(arr =>
     <tr key={arr[0].x}>
@@ -44,10 +52,7 @@ function App() {
         setState(newState);
       }}>Tick</button>
       <button onClick={() => {
-        setState({
-          grid: new Grid(gridSize),
-          started: false
-        })
+        setState(defaultState)
       }}>Reset</button>
     </div>
   );
