@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-const aliveStyle = {
-  backgroundColor: "#5be018"
-}
+
+
 
 interface State {
+  size: number
   grid: Grid
   started: boolean
 }
@@ -15,22 +15,38 @@ const gridSize = 20;
 function App() {
 
   const defaultState: State = {
+    size: gridSize,
     grid: new Grid(gridSize),
     started: false
   };
 
   const [state, setState] = useState(defaultState);
 
+  const sharedStyle = {
+    margin: 0,
+    // padding: 0,
+    width: '20px',
+    height: '20px'
+  }
+
+  const aliveStyle = {
+    ...sharedStyle,
+    backgroundColor: "#5be018"
+  }
+
+  const deadStyle = {
+    ...sharedStyle
+  }
+
   const gridStr = state.grid.cells.map(arr =>
     <tr key={arr[0].x}>
       {arr.map(cell =>
         <td key={cell.x + "" + cell.y}>
-          <button style={cell.alive ? aliveStyle : {}} disabled={state.started} onClick={() => {
+          <button style={cell.alive ? aliveStyle : deadStyle} disabled={state.started} onClick={() => {
             const newState = state;
             newState.grid.cells[cell.x][cell.y].alive = !newState.grid.cells[cell.x][cell.y].alive;
             setState(newState);
           }}>
-            {cell.alive ? 1 : 0}
           </button>
         </td>
       )}
@@ -38,12 +54,18 @@ function App() {
   );
   return (
     <div>
-      <table>
-        <tbody>
-          {gridStr}
-        </tbody>
-      </table>
 
+      <label htmlFor="size">Grid Size: {state.size}</label>
+      <br />
+      <input type="range" min="3" max="50" value={state.size} name="size" onChange={(e) => {
+        const newSize = parseInt(e.target.value);
+        setState({
+          ...defaultState,
+          size: newSize,
+          grid: new Grid(newSize)
+        })
+      }} />
+      <br />
       <button disabled={state.started} onClick={() => setState({ ...state, started: true })}>Start</button>
       <button disabled={!state.started} onClick={() => {
         const newState = state;
@@ -54,6 +76,12 @@ function App() {
       <button onClick={() => {
         setState(defaultState)
       }}>Reset</button>
+
+      <table>
+        <tbody>
+          {gridStr}
+        </tbody>
+      </table>
     </div>
   );
 }
@@ -200,7 +228,7 @@ class Grid {
   }
 
   tick(): void {
-    const grid = new Grid(gridSize);
+    const grid = new Grid(this.size);
     for (let x = 0; x < this.size; x++) {
       for (let y = 0; y < this.size; y++) {
         grid.cells[x][y].alive = this.cells[x][y].shouldBeAlive();
