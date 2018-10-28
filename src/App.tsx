@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import AutoTick from './AutoTick';
-
+import CellComponent from './Cell';
 
 interface State {
   size: number
@@ -27,23 +27,7 @@ function App() {
 
   const [state, setState] = useState(defaultState);
 
-  const sharedStyle = {
-    margin: 0,
-    padding: 0,
-    width: '15px',
-    height: '15px',
-    borderStyle: 'outset',
-    borderWidth: '1px'
-  }
 
-  const aliveStyle = {
-    ...sharedStyle,
-    backgroundColor: "#5be018"
-  }
-
-  const deadStyle = {
-    ...sharedStyle
-  }
 
   const tick = function () {
     const newState = state;
@@ -53,16 +37,13 @@ function App() {
     setState(newState);
   }
 
+  const buttonStyle = state.started ? { pointerEvents: 'none' } : { pointerEvents: 'auto' };
+
   const gridStr = state.grid.cells.map(arr =>
     <tr key={arr[0].x} style={{ padding: 0, margin: 0, height: '1px' }}>
       {arr.map(cell =>
         <td key={cell.x + "" + cell.y} style={{ padding: 0, margin: 0, height: '0px' }}>
-          <button style={cell.alive ? aliveStyle : deadStyle} disabled={state.started} onClick={() => {
-            const newState = state;
-            newState.grid.cells[cell.x][cell.y].alive = !newState.grid.cells[cell.x][cell.y].alive;
-            setState(newState);
-          }}>
-          </button>
+          <CellComponent alive={cell.alive} started={state.started} />
         </td>
       )}
     </tr>
@@ -76,7 +57,7 @@ function App() {
 
       <label htmlFor="size">Grid Size: {state.size}</label>
       <br />
-      <input type="range" min="3" max="50" value={state.size} name="size" onChange={(e) => {
+      <input type="range" min="3" max="75" value={state.size} name="size" onChange={(e) => {
         const newSize = parseInt(e.target.value);
         setState({
           ...defaultState,
@@ -115,6 +96,8 @@ function App() {
 
       <button onClick={() => {
         const newState = defaultState;
+        newState.size = state.size;
+        newState.grid = new Grid(state.size);
 
         for (let x = 0; x < newState.size; x++) {
           for (let y = 0; y < newState.size; y++) {
