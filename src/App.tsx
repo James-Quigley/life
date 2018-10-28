@@ -9,7 +9,8 @@ interface State {
   grid: Grid
   started: boolean,
   ticksPerSec: number,
-  isAutoTicking: boolean
+  isAutoTicking: boolean,
+  ticks: number
 }
 
 const gridSize = 20;
@@ -19,8 +20,9 @@ function App() {
     size: gridSize,
     grid: new Grid(gridSize),
     started: false,
-    ticksPerSec: 5,
-    isAutoTicking: false
+    ticksPerSec: 15,
+    isAutoTicking: false,
+    ticks: 0
   };
 
   const [state, setState] = useState(defaultState);
@@ -47,6 +49,7 @@ function App() {
     const newState = state;
     state.grid.tick();
     newState.grid.cells = state.grid.cells;
+    newState.ticks++;
     setState(newState);
   }
 
@@ -109,6 +112,19 @@ function App() {
       <button onClick={() => {
         setState(defaultState)
       }}>Reset</button>
+
+      <button onClick={() => {
+        const newState = defaultState;
+
+        for (let x = 0; x < newState.size; x++) {
+          for (let y = 0; y < newState.size; y++) {
+            newState.grid.cells[x][y].alive = Math.random() > .5
+          }
+        }
+        setState(newState);
+      }}>Random</button>
+      <br />
+      <p>Ticks: {state.ticks}</p>
 
       <table>
         <tbody>
