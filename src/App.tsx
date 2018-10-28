@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import AutoTick from './AutoTick';
 
 
 
@@ -8,7 +9,9 @@ import './App.css';
 interface State {
   size: number
   grid: Grid
-  started: boolean
+  started: boolean,
+  ticksPerSec: number,
+  isAutoTicking: boolean
 }
 
 const gridSize = 20;
@@ -17,7 +20,9 @@ function App() {
   const defaultState: State = {
     size: gridSize,
     grid: new Grid(gridSize),
-    started: false
+    started: false,
+    ticksPerSec: 5,
+    isAutoTicking: false
   };
 
   const [state, setState] = useState(defaultState);
@@ -38,6 +43,17 @@ function App() {
     ...sharedStyle
   }
 
+  const autoTick = function () {
+
+  }
+
+  const tick = function () {
+    const newState = state;
+    state.grid.tick();
+    newState.grid.cells = state.grid.cells;
+    setState(newState);
+  }
+
   const gridStr = state.grid.cells.map(arr =>
     <tr key={arr[0].x}>
       {arr.map(cell =>
@@ -52,8 +68,12 @@ function App() {
       )}
     </tr>
   );
+
+  const autoTicker = state.isAutoTicking ? <AutoTick onTick={tick} interval={1000 / state.ticksPerSec} /> : ''
   return (
     <div>
+
+      {autoTicker}
 
       <label htmlFor="size">Grid Size: {state.size}</label>
       <br />
@@ -66,13 +86,30 @@ function App() {
         })
       }} />
       <br />
+      <label htmlFor="ticks">Ticks Per Second: {state.ticksPerSec}</label>
+      <br />
+      <input type="range" min="1" max="20" value={state.ticksPerSec} name="ticks" onChange={(e) => {
+        const tps = parseInt(e.target.value);
+        setState({
+          ...state,
+          ticksPerSec: tps
+        })
+      }} />
+      <br />
       <button disabled={state.started} onClick={() => setState({ ...state, started: true })}>Start</button>
-      <button disabled={!state.started} onClick={() => {
-        const newState = state;
-        state.grid.tick();
-        newState.grid.cells = state.grid.cells;
-        setState(newState);
-      }}>Tick</button>
+      <button disabled={!state.started} onClick={tick}>Tick</button>
+      <button disabled={!state.started || (state.isAutoTicking && state.started)} onClick={() => {
+        setState({
+          ...state,
+          isAutoTicking: true
+        })
+      }}>AutoTick</button>
+      <button disabled={!state.started || (!state.isAutoTicking && state.started)} onClick={() => {
+        setState({
+          ...state,
+          isAutoTicking: false
+        })
+      }}>Stop</button>
       <button onClick={() => {
         setState(defaultState)
       }}>Reset</button>
