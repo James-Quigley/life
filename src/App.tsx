@@ -6,9 +6,10 @@ const aliveStyle = {
   backgroundColor: "#5be018"
 }
 
+const gridSize = 20;
 function App() {
   const [state, setState] = useState({
-    grid: new Grid(10),
+    grid: new Grid(gridSize),
     started: false
   });
 
@@ -44,7 +45,7 @@ function App() {
       }}>Tick</button>
       <button onClick={() => {
         setState({
-          grid: new Grid(10),
+          grid: new Grid(gridSize),
           started: false
         })
       }}>Reset</button>
@@ -169,23 +170,24 @@ class Grid {
             cell.neighbors.east = this.cells[x][y + 1];
             cell.neighbors.northeast = this.cells[x - 1][y + 1];
             cell.neighbors.north = this.cells[x - 1][y];
-            cell.neighbors.southwest = this.cells[x + 1][y + 1];
+            cell.neighbors.southwest = this.cells[x + 1][y - 1];
             cell.neighbors.south = this.cells[x + 1][y];
+            cell.neighbors.southeast = this.cells[x + 1][y + 1];
           } else if (y == size - 1) {
             cell.neighbors.north = this.cells[x - 1][y];
             cell.neighbors.northwest = this.cells[x - 1][y - 1];
             cell.neighbors.west = this.cells[x][y - 1];
-            cell.neighbors.southwest = this.cells[x + 1][y + 1];
+            cell.neighbors.southwest = this.cells[x + 1][y - 1];
             cell.neighbors.south = this.cells[x + 1][y];
           } else {
             cell.neighbors.east = this.cells[x][y + 1];
-            cell.neighbors.northeast = this.cells[x - 1][y + 1];
             cell.neighbors.north = this.cells[x - 1][y];
             cell.neighbors.northwest = this.cells[x - 1][y - 1];
             cell.neighbors.west = this.cells[x][y - 1];
-            cell.neighbors.southwest = this.cells[x + 1][y + 1];
+            cell.neighbors.southwest = this.cells[x + 1][y - 1];
             cell.neighbors.south = this.cells[x + 1][y];
             cell.neighbors.northeast = this.cells[x - 1][y + 1];
+            cell.neighbors.southeast = this.cells[x + 1][y + 1];
           }
         }
       }
@@ -193,12 +195,12 @@ class Grid {
   }
 
   tick(): void {
-    const newCells = this.cells.slice();
+    const grid = new Grid(gridSize);
     for (let x = 0; x < this.size; x++) {
       for (let y = 0; y < this.size; y++) {
-        newCells[x][y].alive = this.cells[x][y].shouldBeAlive();
+        grid.cells[x][y].alive = this.cells[x][y].shouldBeAlive();
       }
     }
-    this.cells = newCells;
+    this.cells = grid.cells;
   }
 }
