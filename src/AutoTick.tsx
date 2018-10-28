@@ -22,7 +22,7 @@ class AutoTick extends React.Component<{
     }
 
     render() {
-        return (<div>AUTOTICKING</div>);
+        return (<div></div>);
     }
 }
 

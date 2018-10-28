@@ -4,8 +4,6 @@ import './App.css';
 import AutoTick from './AutoTick';
 
 
-
-
 interface State {
   size: number
   grid: Grid
@@ -29,9 +27,11 @@ function App() {
 
   const sharedStyle = {
     margin: 0,
-    // padding: 0,
-    width: '20px',
-    height: '20px'
+    padding: 0,
+    width: '15px',
+    height: '15px',
+    borderStyle: 'outset',
+    borderWidth: '1px'
   }
 
   const aliveStyle = {
@@ -43,10 +43,6 @@ function App() {
     ...sharedStyle
   }
 
-  const autoTick = function () {
-
-  }
-
   const tick = function () {
     const newState = state;
     state.grid.tick();
@@ -55,9 +51,9 @@ function App() {
   }
 
   const gridStr = state.grid.cells.map(arr =>
-    <tr key={arr[0].x}>
+    <tr key={arr[0].x} style={{ padding: 0, margin: 0, height: '1px' }}>
       {arr.map(cell =>
-        <td key={cell.x + "" + cell.y}>
+        <td key={cell.x + "" + cell.y} style={{ padding: 0, margin: 0, height: '0px' }}>
           <button style={cell.alive ? aliveStyle : deadStyle} disabled={state.started} onClick={() => {
             const newState = state;
             newState.grid.cells[cell.x][cell.y].alive = !newState.grid.cells[cell.x][cell.y].alive;
