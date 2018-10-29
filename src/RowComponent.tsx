@@ -35,13 +35,19 @@ class RowComponent extends React.Component<Props, {}> {
     }
 
     render() {
-        return <tr>
-            {this.props.row.map(cell =>
-                <td onClick={() => this.props.cellClick(cell.x, cell.y)} key={cell.x + "." + cell.y} style={{ pointerEvents: this.props.started ? 'none' : 'auto', padding: 0, margin: 0, height: '0px' }}>
-                    <CellComponent alive={cell.alive} />
-                </td>
-            )}
-        </tr>
+        const cells = this.props.row.map(cell =>
+            <CellComponent
+                alive={cell.alive}
+                onClick={() => this.props.cellClick(cell.x, cell.y)}
+                key={cell.x + "." + cell.y}
+                style={{ pointerEvents: this.props.started ? 'none' : 'auto', padding: 0, margin: 0, height: '0px' }}
+            />
+        );
+
+        // return {[cells] <br />};
+        return <div style={this.props.style}>
+            { cells }
+        </div >
     }
 
 }

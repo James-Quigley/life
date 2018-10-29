@@ -121,16 +121,12 @@ class App extends React.Component<{}, State> {
         }}>Random</button>
         <br />
         <p>Ticks: {this.state.ticks}</p>
-
-        <table>
-          <tbody>
-            {
-              this.state.grid.cells.map((arr) =>
-                <RowComponent cellClick={this.toggleCell} key={arr[0].x} style={{ padding: 0, margin: 0, height: '1px' }} row={arr} started={this.state.started} />
-              )
-            }
-          </tbody>
-        </table>
+        <br />
+        {
+          this.state.grid.cells.map((arr) =>
+            <RowComponent cellClick={this.toggleCell} key={arr[0].x} style={{ padding: 0, margin: 0, height: '12px' }} row={arr} started={this.state.started} />
+          )
+        }
       </div>
     );
   }

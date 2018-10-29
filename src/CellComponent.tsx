@@ -6,7 +6,8 @@ const sharedStyle = {
     width: '10px',
     height: '10px',
     borderStyle: 'outset',
-    borderWidth: '1px'
+    borderWidth: '1px',
+    display: 'inline-block'
 }
 
 const aliveStyle = {
@@ -18,16 +19,22 @@ const deadStyle = {
     ...sharedStyle
 }
 
-class CellComponent extends React.PureComponent<{ alive: boolean }, {}> {
+interface Props {
+    alive: boolean,
+    onClick: () => void,
+    style: React.CSSProperties
+}
 
-    constructor(props: { alive: boolean }) {
+class CellComponent extends React.PureComponent<Props, {}> {
+
+    constructor(props: Props) {
         super(props);
     }
 
     render() {
         return (
-            <div style={
-                this.props.alive ? { ...aliveStyle } : { ...deadStyle }
+            <div onClick={() => this.props.onClick()} style={
+                this.props.alive ? { ...this.props.style, ...aliveStyle } : { ...this.props.style, ...deadStyle }
             }>
             </div>
         );
