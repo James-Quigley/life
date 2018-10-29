@@ -18,18 +18,17 @@ const deadStyle = {
     ...sharedStyle
 }
 
-class CellComponent extends React.PureComponent<{ alive: boolean, started: boolean }, {}> {
+class CellComponent extends React.PureComponent<{ alive: boolean }, {}> {
 
-    constructor(props: { alive: boolean, started: boolean }) {
+    constructor(props: { alive: boolean }) {
         super(props);
     }
 
     render() {
         return (
             <div style={
-                this.props.alive ?
-                    { ...aliveStyle, pointerEvents: this.props.started ? 'none' : 'auto' }
-                    : { ...deadStyle, pointerEvents: this.props.started ? 'none' : 'auto' }}>
+                this.props.alive ? { ...aliveStyle } : { ...deadStyle }
+            }>
             </div>
         );
     }
