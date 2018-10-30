@@ -53,10 +53,10 @@ class App extends React.Component<{}, State> {
       const row = this.state.grid.cells[index];
       for (let cellIndex = 0; cellIndex < row.length; cellIndex++) {
         const cell = row[cellIndex];
-        newState.grid.cells[index][cellIndex].alive = this.state.grid.cells[index][cellIndex].alive;
+        newState.grid.setCellState(index, cellIndex, this.state.grid.cells[index][cellIndex].alive);
       }
     }
-    newState.grid.cells[x][y].alive = !newState.grid.cells[x][y].alive;
+    newState.grid.toggleCellState(x, y);
     this.setState(newState);
   }
 
@@ -114,7 +114,9 @@ class App extends React.Component<{}, State> {
 
           for (let x = 0; x < newState.size; x++) {
             for (let y = 0; y < newState.size; y++) {
-              newState.grid.cells[x][y].alive = Math.random() > .5
+              if (Math.random() > .5){
+                newState.grid.toggleCellState(x, y);
+              }
             }
           }
           this.setState(newState);

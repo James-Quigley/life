@@ -3,9 +3,13 @@ export default class Grid {
 
     cells: Cell[][];
     size: number;
+    aliveCells: {
+        [key:string]:boolean
+    }
 
     constructor(size: number) {
         this.size = size;
+        this.aliveCells = {};
 
         this.cells = [];
         // Create cell grid
@@ -81,13 +85,65 @@ export default class Grid {
         }
     }
 
+    toggleCellState(x: number, y: number) {
+        const isAlive = this.cells[x][y].alive;
+        this.setCellState(x, y, !isAlive);
+        
+    }
+
+    setCellState(x: number, y: number, alive: boolean) {
+        if (!alive){
+            if (this.aliveCells[x + "." + y]){
+                delete this.aliveCells[x + "." + y];
+            }
+        } else {
+            this.aliveCells[x + "." + y] = true;
+        }
+        this.cells[x][y].alive = alive;
+    }
+
     tick(): Grid {
+        const start = Date.now();
         const grid = new Grid(this.size);
-        for (let x = 0; x < this.size; x++) {
-            for (let y = 0; y < this.size; y++) {
-                grid.cells[x][y].alive = this.cells[x][y].shouldBeAlive();
+        const visitedCells: {[key:string]:boolean} = {};
+        const cellsToVisit = [];
+        for (const coord in this.aliveCells){
+            // const coords = coord.split(".");
+            // const intCoords = coords.map(parseInt);
+            // const [x, y] = intCoords;
+            const [x, y] = coord.split(".").map(num => parseInt(num));
+            const cell = this.cells[x][y];
+            visitedCells[coord] = true;
+            for (const neighborDir of Object.keys(cell.neighbors)) {
+                const neighbor = cell.neighbors[neighborDir];
+                if (neighbor && !neighbor.alive){
+                    cellsToVisit.push(neighbor.x + "." + neighbor.y);
+                }
+            }
+
+            const shouldBeAlive = this.cells[x][y].shouldBeAlive();
+            grid.cells[x][y].alive = shouldBeAlive;
+            if (shouldBeAlive){
+                grid.aliveCells[x + "." + y] = true;
             }
         }
+
+        for (const coord of cellsToVisit){
+            if (!visitedCells[coord]){
+                const [x, y] = coord.split(".").map(num => parseInt(num));
+                
+                const cell = this.cells[x][y];
+                visitedCells[coord] = true;
+
+                const shouldBeAlive = this.cells[x][y].shouldBeAlive();
+                grid.cells[x][y].alive = shouldBeAlive;
+                if (shouldBeAlive){
+                    grid.aliveCells[x + "." + y] = true;
+                }
+            }
+        }
+
+        console.log("Tick time", Date.now() - start);
         return grid;
     }
 }
