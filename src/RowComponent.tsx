@@ -6,7 +6,8 @@ interface Props {
     style: React.CSSProperties,
     row: Cell[],
     cellClick: (x: number, y: number) => void,
-    started: boolean
+    started: boolean,
+    cellSize: number
 }
 
 class RowComponent extends React.Component<Props, {}> {
@@ -15,6 +16,9 @@ class RowComponent extends React.Component<Props, {}> {
     }
 
     shouldComponentUpdate(nextProps: Props) {
+        if (this.props.cellSize != nextProps.cellSize){
+            return true;
+        }
         if (this.props.started != nextProps.started) {
             return true;
         }
@@ -41,6 +45,7 @@ class RowComponent extends React.Component<Props, {}> {
                 onClick={() => this.props.cellClick(cell.x, cell.y)}
                 key={cell.x + "." + cell.y}
                 style={{ pointerEvents: this.props.started ? 'none' : 'auto', padding: 0, margin: 0, height: '0px' }}
+                cellSize={this.props.cellSize}
             />
         );
 

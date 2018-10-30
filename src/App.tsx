@@ -13,7 +13,8 @@ interface State {
   started: boolean,
   ticksPerSec: number,
   isAutoTicking: boolean,
-  ticks: number
+  ticks: number,
+  cellSize: number
 }
 
 const gridSize = 20;
@@ -24,7 +25,8 @@ const defaultState: State = {
   started: false,
   ticksPerSec: 15,
   isAutoTicking: false,
-  ticks: 0
+  ticks: 0,
+  cellSize: 10
 };
 
 class App extends React.Component<{}, State> {
@@ -35,7 +37,7 @@ class App extends React.Component<{}, State> {
     this.getButtonStyle = this.getButtonStyle.bind(this);
     this.tick = this.tick.bind(this);
     this.toggleCell = this.toggleCell.bind(this);
-    this.reset = this.reset.bind(this);
+    this.clear = this.clear.bind(this);
   }
 
   getButtonStyle() {
@@ -60,8 +62,8 @@ class App extends React.Component<{}, State> {
     this.setState(newState);
   }
 
-  reset() {
-    this.setState({ ...defaultState, grid: new Grid(defaultState.size) });
+  clear() {
+    this.setState({ grid: new Grid(this.state.size), isAutoTicking: false, started: false, ticks: 0 });
   }
 
   render() {
@@ -75,12 +77,24 @@ class App extends React.Component<{}, State> {
         <input type="range" min="3" max="75" value={this.state.size} name="size" onChange={(e) => {
           const newSize = parseInt(e.target.value);
           this.setState({
-            ...defaultState,
             size: newSize,
-            grid: new Grid(newSize)
+            grid: new Grid(newSize),
+            isAutoTicking: false
           })
         }} />
         <br />
+
+        <label htmlFor="cellsize">Cell Size: {this.state.cellSize}</label>
+        <br />
+        <input type="range" min="3" max="100" value={this.state.cellSize} name="cellsize" onChange={(e) => {
+          const newSize = parseInt(e.target.value);
+          this.setState({
+            cellSize: newSize
+          })
+        }} />
+        <br />
+
+
         <label htmlFor="ticks">Ticks Per Second: {this.state.ticksPerSec}</label>
         <br />
         <input type="range" min="1" max="20" value={this.state.ticksPerSec} name="ticks" onChange={(e) => {
@@ -105,26 +119,24 @@ class App extends React.Component<{}, State> {
             isAutoTicking: false
           })
         }}>Stop</button>
-        <button onClick={() => this.reset()}>Reset</button>
+        <button onClick={() => this.clear()}>Clear</button>
 
         <button onClick={() => {
-          const newState = defaultState;
-          newState.size = this.state.size;
-          newState.grid = new Grid(this.state.size);
+          const grid = new Grid(this.state.size);
 
-          for (let x = 0; x < newState.size; x++) {
-            for (let y = 0; y < newState.size; y++) {
-              newState.grid.cells[x][y].alive = Math.random() > .5
+          for (let x = 0; x < this.state.size; x++) {
+            for (let y = 0; y < this.state.size; y++) {
+              grid.cells[x][y].alive = Math.random() > .5;
             }
           }
-          this.setState(newState);
+          this.setState({grid, isAutoTicking: false, started: false, ticks: 0});
         }}>Random</button>
         <br />
         <p>Ticks: {this.state.ticks}</p>
         <br />
         {
           this.state.grid.cells.map((arr) =>
-            <RowComponent cellClick={this.toggleCell} key={arr[0].x} style={{ padding: 0, margin: 0, height: '12px' }} row={arr} started={this.state.started} />
+            <RowComponent cellClick={this.toggleCell} key={arr[0].x} style={{ padding: 0, margin: 0, height: `${this.state.cellSize + 2}px` }} cellSize={this.state.cellSize} row={arr} started={this.state.started} />
           )
         }
       </div>
