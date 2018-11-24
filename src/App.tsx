@@ -135,7 +135,7 @@ class App extends React.Component<{}, State> {
         <br />
         <p>Ticks: {this.state.ticks}</p>
         <br />
-        <Canvas gridSize={this.state.size} cellSize={this.state.cellSize} grid={this.state.grid} />
+        <Canvas cellClick={this.toggleCell} gridSize={this.state.size} cellSize={this.state.cellSize} grid={this.state.grid} started={this.state.started} />
         {/* {
           this.state.grid.cells.map((arr) =>
             <RowComponent cellClick={this.toggleCell} key={arr[0].x} style={{ padding: 0, margin: 0, height: `${this.state.cellSize + 2}px` }} cellSize={this.state.cellSize} row={arr} started={this.state.started} />

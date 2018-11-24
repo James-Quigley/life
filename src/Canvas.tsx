@@ -6,6 +6,8 @@ interface Props {
   gridSize: number
   cellSize: number
   grid: Grid
+  started: boolean
+  cellClick: (x: number, y: number) => void
 }
 
 export default class extends React.PureComponent {
@@ -16,21 +18,61 @@ export default class extends React.PureComponent {
     this.props = props;
   }
 
-  componentWillUpdate(nextProps: Props) {
+  componentDidMount() {
+    // console.log("DID MOUNT");
     // @ts-ignore
     let canvas = this.refs.canvas.getContext('2d');
     if (canvas){
-      for(let x = 0; x < nextProps.gridSize; x++){
-        for (let y = 0; y < nextProps.gridSize; y++) {
-          canvas.fillStyle = nextProps.grid.cells[x][y].alive ? "#5be018" : "#fff"
-          canvas.fillRect(x * nextProps.cellSize, y * nextProps.cellSize, nextProps.cellSize, nextProps.cellSize);
+      for(let x = 0; x < this.props.gridSize; x++){
+        for (let y = 0; y < this.props.gridSize; y++) {
+          canvas.fillStyle = "#ccc";
+          canvas.fillRect(x * this.props.cellSize, y * this.props.cellSize, this.props.cellSize, this.props.cellSize);
+          canvas.fillStyle = this.props.grid.cells[x][y].alive ? "#5be018" : "#fff"
+          canvas.fillRect(x * this.props.cellSize + 1, y * this.props.cellSize + 1, this.props.cellSize - 2, this.props.cellSize - 2);
         }
       }
     }
   }
 
+  componentDidUpdate() {
+    // @ts-ignore
+    let canvas = this.refs.canvas.getContext('2d');
+    if (canvas){
+      for(let x = 0; x < this.props.gridSize; x++){
+        for (let y = 0; y < this.props.gridSize; y++) {
+          // console.log("drawing cell");
+          // @ts-ignore
+          // this.refs.canvas.width = (this.props.cellSize * this.props.gridSize);
+          // @ts-ignore
+          // console.log(this.refs.canvas.width);
+          // @ts-ignore
+          // this.refs.canvas.height = (this.props.cellSize * this.props.gridSize);
+          canvas.fillStyle = "#ccc";
+          canvas.fillRect(x * this.props.cellSize, y * this.props.cellSize, this.props.cellSize, this.props.cellSize);
+          canvas.fillStyle = this.props.grid.cells[x][y].alive ? "#5be018" : "#fff"
+          canvas.fillRect(x * this.props.cellSize + 1, y * this.props.cellSize + 1, this.props.cellSize - 2, this.props.cellSize - 2);
+        }
+      }
+    }
+  }
+
+  getCursorPosition(rect:ClientRect, event:React.MouseEvent) {
+    var x = event.clientX - rect.left;
+    var y = event.clientY - rect.top;
+    return {x, y}
+}
+
   render() {
-    
-    return <canvas ref="canvas" width={(this.props.cellSize * this.props.gridSize)} height={(this.props.cellSize * this.props.gridSize)}/>;
+    // console.log("RENDER");
+    // @ts-ignore
+    return <canvas ref="canvas" onClick={(e) => {
+      if (!this.props.started){
+        const { x, y } = this.getCursorPosition(e.currentTarget.getBoundingClientRect(), e);
+        const xIndex = Math.floor(x/this.props.cellSize);
+        const yIndex = Math.floor(y/this.props.cellSize);
+
+        this.props.cellClick(xIndex, yIndex);
+      }
+    }} width={(this.props.cellSize * this.props.gridSize)} height={(this.props.cellSize * this.props.gridSize)}/>;
   }
 }
