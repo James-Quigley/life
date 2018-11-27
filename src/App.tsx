@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import AutoTick from './AutoTick';
-import CellComponent from './CellComponent';
-import RowComponent from './RowComponent';
-import Cell from './Cell';
 import Grid from './Grid';
+import Canvas from './Canvas';
 
 interface State {
   size: number
@@ -74,12 +72,13 @@ class App extends React.Component<{}, State> {
 
         <label htmlFor="size">Grid Size: {this.state.size}</label>
         <br />
-        <input type="range" min="3" max="75" value={this.state.size} name="size" onChange={(e) => {
+        <input type="range" min="3" max="200" value={this.state.size} name="size" onChange={(e) => {
           const newSize = parseInt(e.target.value);
           this.setState({
             size: newSize,
             grid: new Grid(newSize),
-            isAutoTicking: false
+            isAutoTicking: false,
+            ticks: 0
           })
         }} />
         <br />
@@ -134,11 +133,7 @@ class App extends React.Component<{}, State> {
         <br />
         <p>Ticks: {this.state.ticks}</p>
         <br />
-        {
-          this.state.grid.cells.map((arr) =>
-            <RowComponent cellClick={this.toggleCell} key={arr[0].x} style={{ padding: 0, margin: 0, height: `${this.state.cellSize + 2}px` }} cellSize={this.state.cellSize} row={arr} started={this.state.started} />
-          )
-        }
+        <Canvas cellClick={this.toggleCell} gridSize={this.state.size} cellSize={this.state.cellSize} grid={this.state.grid} started={this.state.started} />
       </div>
     );
   }
