@@ -2,9 +2,6 @@ import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import AutoTick from './AutoTick';
-import CellComponent from './CellComponent';
-import RowComponent from './RowComponent';
-import Cell from './Cell';
 import Grid from './Grid';
 import Canvas from './Canvas';
 
@@ -136,11 +133,6 @@ class App extends React.Component<{}, State> {
         <p>Ticks: {this.state.ticks}</p>
         <br />
         <Canvas cellClick={this.toggleCell} gridSize={this.state.size} cellSize={this.state.cellSize} grid={this.state.grid} started={this.state.started} />
-        {/* {
-          this.state.grid.cells.map((arr) =>
-            <RowComponent cellClick={this.toggleCell} key={arr[0].x} style={{ padding: 0, margin: 0, height: `${this.state.cellSize + 2}px` }} cellSize={this.state.cellSize} row={arr} started={this.state.started} />
-          )
-        } */}
       </div>
     );
   }
