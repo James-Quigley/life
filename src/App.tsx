@@ -77,7 +77,8 @@ class App extends React.Component<{}, State> {
           this.setState({
             size: newSize,
             grid: new Grid(newSize),
-            isAutoTicking: false
+            isAutoTicking: false,
+            ticks: 0
           })
         }} />
         <br />
