@@ -85,7 +85,7 @@ export default class Grid {
                         cell.neighbors.east = this.cells[x][y + 1];
                         cell.neighbors.southeast = this.cells[x + 1][y + 1];
                         cell.neighbors.south = this.cells[x + 1][y];
-                        cell.neighbors.southwest = this.cells[x + 1][y - 1];
+                        cell.neighbors.southwest = this.cells[x + 1][size - 1];
                         cell.neighbors.west = this.cells[x][size - 1];
                         cell.neighbors.northwest = this.cells[x - 1][size - 1];
                     } else if (y == size - 1) {

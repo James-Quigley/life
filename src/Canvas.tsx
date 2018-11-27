@@ -26,9 +26,9 @@ export default React.memo((props: Props)=>{
     for(let x = 0; x < props.gridSize; x++){
       for (let y = 0; y < props.gridSize; y++) {
         canvas.fillStyle = "#ccc";
-        canvas.fillRect(x * props.cellSize, y * props.cellSize, props.cellSize, props.cellSize);
+        canvas.fillRect(y * props.cellSize, x * props.cellSize, props.cellSize, props.cellSize);
         canvas.fillStyle = props.grid.cells[x][y].alive ? "#5be018" : "#fff"
-        canvas.fillRect(x * props.cellSize + 1, y * props.cellSize + 1, props.cellSize - 2, props.cellSize - 2);
+        canvas.fillRect(y * props.cellSize + 1, x * props.cellSize + 1, props.cellSize - 2, props.cellSize - 2);
       }
     }
   });
@@ -36,8 +36,8 @@ export default React.memo((props: Props)=>{
   return <canvas ref={canvasRef} onClick={(e) => {
     if (!props.started){
       const { x, y } = getCursorPosition(e.currentTarget.getBoundingClientRect(), e);
-      const xIndex = Math.floor(x/props.cellSize);
-      const yIndex = Math.floor(y/props.cellSize);
+      const xIndex = Math.floor(y/props.cellSize);
+      const yIndex = Math.floor(x/props.cellSize);
 
       props.cellClick(xIndex, yIndex);
     }
