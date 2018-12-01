@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
 import AutoTick from './AutoTick';
-import Grid from './Grid';
+import Grid from '../Grid';
 import Canvas from './Canvas';
 import Navbar from './Navbar';
 
