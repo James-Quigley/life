@@ -26,15 +26,15 @@ const defaultState: State = {
 };
 
 export default () => {
-  const [getState, setState] = useState(defaultState);
+  const [state, setState] = useState(defaultState);
 
   const toggleCell = (x: number, y: number) => {
-    const newState = { ...getState, grid: new Grid(getState.size) };
-    for (let index = 0; index < getState.grid.cells.length; index++) {
-      const row = getState.grid.cells[index];
+    const newState = { ...state, grid: new Grid(state.size) };
+    for (let index = 0; index < state.grid.cells.length; index++) {
+      const row = state.grid.cells[index];
       for (let cellIndex = 0; cellIndex < row.length; cellIndex++) {
         const cell = row[cellIndex];
-        newState.grid.cells[index][cellIndex].alive = getState.grid.cells[index][cellIndex].alive;
+        newState.grid.cells[index][cellIndex].alive = state.grid.cells[index][cellIndex].alive;
       }
     }
     newState.grid.cells[x][y].alive = !newState.grid.cells[x][y].alive;
@@ -42,15 +42,15 @@ export default () => {
   };
 
   const tick = () => {
-    const newGrid = getState.grid.tick();
-    setState({ ...getState, grid: newGrid, ticks: getState.ticks + 1 });
+    const newGrid = state.grid.tick();
+    setState({ ...state, grid: newGrid, ticks: state.ticks + 1 });
   }
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
     
-    if (getState.isAutoTicking){
-      interval = setInterval(tick, 1000/getState.ticksPerSec);
+    if (state.isAutoTicking){
+      interval = setInterval(tick, 1000/state.ticksPerSec);
     }
 
     return () => clearInterval(interval);
@@ -64,15 +64,15 @@ export default () => {
         <div className="row">
           <div className="col-sm">
             <div className="card-group">
-              <GridControls getState={getState} setState={setState} />
-              <GameControls getState={getState} setState={setState} tick={tick} />
+              <GridControls getState={state} setState={setState} />
+              <GameControls getState={state} setState={setState} tick={tick} />
             </div>
           </div>
         </div>
       </div>    
 
       <div className="text-center pagination-centered mt-2">
-        <Canvas cellClick={toggleCell} gridSize={getState.size} cellSize={getState.cellSize} grid={getState.grid} isAutoTicking={getState.isAutoTicking} />
+        <Canvas cellClick={toggleCell} gridSize={state.size} cellSize={state.cellSize} grid={state.grid} isAutoTicking={state.isAutoTicking} />
       </div>
     </div>
   );
