@@ -133,7 +133,7 @@ class App extends React.Component<{}, State> {
         <br />
         <p>Ticks: {this.state.ticks}</p>
         <br />
-        <Canvas cellClick={this.toggleCell} gridSize={this.state.size} cellSize={this.state.cellSize} grid={this.state.grid} started={this.state.started} />
+        <Canvas cellClick={this.toggleCell} gridSize={this.state.size} cellSize={this.state.cellSize} grid={this.state.grid} started={this.state.started} isAutoTicking={this.state.isAutoTicking} />
       </div>
     );
   }

@@ -8,7 +8,8 @@ interface Props {
   cellSize: number
   grid: Grid
   started: boolean
-  cellClick: (x: number, y: number) => void
+  cellClick: (x: number, y: number) => void,
+  isAutoTicking: boolean
 }
 
 const getCursorPosition = (rect:ClientRect, event:React.MouseEvent) => {
@@ -34,7 +35,7 @@ export default React.memo((props: Props)=>{
   });
 
   return <canvas ref={canvasRef} onClick={(e) => {
-    if (!props.started){
+    if (!props.isAutoTicking){
       const { x, y } = getCursorPosition(e.currentTarget.getBoundingClientRect(), e);
       const xIndex = Math.floor(y/props.cellSize);
       const yIndex = Math.floor(x/props.cellSize);
