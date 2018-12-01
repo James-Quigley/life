@@ -7,7 +7,6 @@ interface Props {
   gridSize: number
   cellSize: number
   grid: Grid
-  started: boolean
   cellClick: (x: number, y: number) => void,
   isAutoTicking: boolean
 }
