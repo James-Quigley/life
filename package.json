@@ -27,6 +27,6 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@types/node": "^10.12.14"
+    "@types/node": "^10.12.15"
   }
 }
