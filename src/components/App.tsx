@@ -60,20 +60,26 @@ export default () => {
     <div>
       <Navbar />
 
-      <div className="container mt-4">
+      <div className="container-fluid mt-4">
         <div className="row">
-          <div className="col-sm">
+          <div className="col-lg-4 col-md-12">
             <div className="card-group">
-              <GridControls getState={state} setState={setState} />
-              <GameControls getState={state} setState={setState} tick={tick} />
+              <div className="col-lg-12">
+                <GridControls getState={state} setState={setState} />
+              </div>
+              <div className="col-lg-12">
+                <GameControls getState={state} setState={setState} tick={tick} />
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-8">
+            <div className="text-center pagination-centered mt-2">
+              <Canvas cellClick={toggleCell} gridSize={state.size} cellSize={state.cellSize} grid={state.grid} isAutoTicking={state.isAutoTicking} />
             </div>
           </div>
         </div>
       </div>    
 
-      <div className="text-center pagination-centered mt-2">
-        <Canvas cellClick={toggleCell} gridSize={state.size} cellSize={state.cellSize} grid={state.grid} isAutoTicking={state.isAutoTicking} />
-      </div>
     </div>
   );
 };
